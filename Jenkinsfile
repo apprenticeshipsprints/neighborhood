@@ -4,7 +4,7 @@ pipeline {
   stages {
     stage('build') {
       steps {
-        build '../reticulum'
+        build 'reticulum'
       }
     }
   }
