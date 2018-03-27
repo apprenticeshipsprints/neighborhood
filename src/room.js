@@ -133,9 +133,18 @@ function setNameTagFromStore() {
   myNametag.setAttribute("text", "value", store.state.profile.display_name);
 }
 
+function getSceneCanvas() {
+  return (
+    // a-frame webvr cavnas
+    document.querySelector("a-scene canvas") || 
+    // aframe-xr webxr canvas
+    document.querySelector(".a-canvas")
+  );
+}
+
 async function enterScene(mediaStream, enterInVR) {
   const scene = document.querySelector("a-scene");
-  document.querySelector("a-scene canvas").classList.remove("blurred")
+  getSceneCanvas().classList.remove("blurred")
   scene.setAttribute("networked-scene", "adapter: janus; audio: true; debug: true; connectOnLoad: false;");
   registerNetworkSchemas();
 
@@ -158,18 +167,20 @@ async function enterScene(mediaStream, enterInVR) {
     scene.setAttribute("stats", true);
   }
 
+  const playerRig = document.querySelector("#player-rig");
   if (isMobile || qs.mobile) {
-    const playerRig = document.querySelector("#player-rig");
     playerRig.setAttribute("virtual-gamepad-controls", {});
   }
 
   setNameTagFromStore();
   store.addEventListener('statechanged', setNameTagFromStore);
 
-  const avatarScale = parseInt(qs.avatarScale, 10);
-
+  const avatarScale = parseFloat(qs.avatarScale);
   if (avatarScale) {
-    playerRig.setAttribute("scale", { x: avatarScale, y: avatarScale, z: avatarScale });
+    playerRig.setAttribute(
+      'character-controller', 
+      {scale: `${avatarScale} ${avatarScale} ${avatarScale}`}
+    );
   }
 
   let sharingScreen = false;
@@ -242,7 +253,7 @@ function mountUI(scene) {
 
 const onReady = () => {
   const scene = document.querySelector("a-scene");
-  document.querySelector("a-scene canvas").classList.add("blurred");
+  getSceneCanvas().classList.add("blurred");
   window.APP.scene = scene;
   mountUI(scene);
 };

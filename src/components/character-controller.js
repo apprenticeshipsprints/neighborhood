@@ -8,7 +8,8 @@ AFRAME.registerComponent("character-controller", {
     easing: { default: 10 },
     pivot: { type: "selector" },
     snapRotationDegrees: { default: THREE.Math.DEG2RAD * 45 },
-    rotationSpeed: { default: -3 }
+    rotationSpeed: { default: -3 },
+    scale: { default: '1 1 1' }
   },
 
   init: function() {
@@ -121,6 +122,8 @@ AFRAME.registerComponent("character-controller", {
       });
 
       this.el.setAttribute("position", root.position);
+
+      this.el.setAttribute("scale", this.data.scale);
 
       this.pendingSnapRotationMatrix.identity(); // Revert to identity
     };
