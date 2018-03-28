@@ -81,6 +81,12 @@
                             </a-entity>
                         </template>
 
+                        <template data-selector=".Chest">
+                          <a-entity>
+                             <a-entity class="video" geometry="primitive: plane;" material="side: double;" networked-video-player position="0 -0.03 0.13" scale="0.15 0.15 0.15"></a-entity>
+                          </a-entity>
+                        </template>
+
                         <template selector=".LeftHand">
                             <a-entity personal-space-invader ></a-entity>
                         </template>
@@ -161,6 +167,7 @@
                     position="0 0 0"
                     raycaster="objects: .collidable; direction: 0 0 -1;"
                 ></a-entity>
+               <a-entity class="video" geometry="primitive: plane;" material="side: double" networked-video-player scale="0.3 0.3 0.3" position="-1 0 -1"></a-entity>
             </a-entity>
 
             <a-entity

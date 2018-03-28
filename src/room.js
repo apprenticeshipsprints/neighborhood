@@ -188,21 +188,10 @@ async function enterScene(mediaStream, enterInVR) {
 
     if (mediaStream) {
       NAF.connection.adapter.setLocalMediaStream(mediaStream);
+    }
 
-      if (screenEntity) {
-        screenEntity.setAttribute("visible", sharingScreen);
-      } else if (sharingScreen) {
-        const sceneEl = document.querySelector("a-scene");
-        screenEntity = document.createElement("a-entity");
-        screenEntity.id = screenEntityId;
-        screenEntity.setAttribute("offset-relative-to", {
-          target: "#player-camera",
-          offset: "0 0 -2",
-          on: "action_share_screen"
-        });
-        screenEntity.setAttribute("networked", { template: "#video-template" });
-        sceneEl.appendChild(screenEntity);
-      }
+    if (!mediaStream || !sharingScreen) {
+      playerRig.querySelector('.video').setAttribute('visible', false);
     }
   }
 }

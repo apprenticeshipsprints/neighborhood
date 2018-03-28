@@ -26,7 +26,8 @@ AFRAME.registerComponent("networked-video-player", {
 
     const ownerId = networkedEl.components.networked.data.owner;
     const stream = await NAF.connection.adapter.getMediaStream(ownerId, "video");
-    if (!stream) {
+    if (!stream || !stream.getVideoTracks().length) {
+      this.el.setAttribute('visible', false);
       return;
     }
 

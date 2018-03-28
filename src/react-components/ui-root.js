@@ -250,7 +250,7 @@ class UIRoot extends Component {
   }
 
   mediaVideoConstraint = () => {
-    return this.state.shareScreen ? { mediaSource: "screen", height: 720, frameRate: 30 } : false;
+    return this.state.shareScreen ? true : false;
   }
 
   micDeviceChanged = async (ev) => {
@@ -287,25 +287,28 @@ class UIRoot extends Component {
 
     const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
 
-    const source = audioContext.createMediaStreamSource(mediaStream);
-    const analyzer = audioContext.createAnalyser();
-    const levels = new Uint8Array(analyzer.fftSize);
+    let micUpdateInterval;
+    if (mediaStream.getAudioTracks().length > 0) {
+      const source = audioContext.createMediaStreamSource(mediaStream);
+      const analyzer = audioContext.createAnalyser();
+      const levels = new Uint8Array(analyzer.fftSize);
 
-    source.connect(analyzer);
+      source.connect(analyzer);
 
-    const micUpdateInterval = setInterval(() => {
-      analyzer.getByteTimeDomainData(levels);
+      micUpdateInterval = setInterval(() => {
+        analyzer.getByteTimeDomainData(levels);
 
-      let v = 0;
+        let v = 0;
 
-      for (let x = 0; x < levels.length; x++) {
-        v = Math.max(levels[x] - 127, v);
-      }
+        for (let x = 0; x < levels.length; x++) {
+          v = Math.max(levels[x] - 127, v);
+        }
 
-      const level = v / 128.0 ;
-      this.micLevelMovingAverage.push(Date.now(), level);
-      this.setState({ micLevel: this.micLevelMovingAverage.movingAverage() })
-    }, 50);
+        const level = v / 128.0 ;
+        this.micLevelMovingAverage.push(Date.now(), level);
+        this.setState({ micLevel: this.micLevelMovingAverage.movingAverage() })
+      }, 50);
+    }
 
     this.setState({ mediaStream, micUpdateInterval });
   }
@@ -422,14 +425,13 @@ class UIRoot extends Component {
               subtitle={this.state.availableVREntryTypes.daydream == VR_DEVICE_AVAILABILITY.maybe ? daydreamMaybeSubtitle : "" }/> }
         { this.state.availableVREntryTypes.cardboard !== VR_DEVICE_AVAILABILITY.no &&
           (<div className="entry-panel__secondary" onClick={this.enterVR}><FormattedMessage id="entry.cardboard"/></div>) }
-        { !mobiledetect.mobile() && /firefox/i.test(navigator.userAgent) && (
-          <label className="entry-panel__screensharing">
-            <input className="entry-panel__screensharing-checkbox" type="checkbox"
-              value={this.state.shareScreen}
-              onChange={this.setStateAndRequestScreen}
-            />
-            <FormattedMessage id="entry.enable-screensharing" />
-          </label>) }
+        <label className="entry-panel__screensharing">
+          <input className="entry-panel__screensharing-checkbox" type="checkbox"
+            value={this.state.shareScreen}
+            onChange={this.setStateAndRequestScreen}
+          />
+          <FormattedMessage id="entry.enable-screensharing" />
+        </label>
       </div>
     ) : null;
 
