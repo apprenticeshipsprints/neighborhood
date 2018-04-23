@@ -23,6 +23,7 @@
     "aframe-billboard-component": "^1.0.0",
     "aframe-extras": "^4.0.0",
     "aframe-input-mapping-component": "https://github.com/johnshaughnessy/aframe-input-mapping-component#feature/map-to-array",
+    "aframe-motion-capture-components": "^0.2.7",
     "aframe-physics-extras": "https://github.com/infinitelee/aframe-physics-extras#fix/physics-collider-crash",
     "aframe-physics-system": "https://github.com/infinitelee/aframe-physics-system#feature/shape-component",
     "aframe-rounded": "^1.0.3",

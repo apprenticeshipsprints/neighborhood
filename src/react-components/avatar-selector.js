@@ -5,6 +5,8 @@ import FontAwesomeIcon from "@fortawesome/react-fontawesome";
 import faAngleLeft from "@fortawesome/fontawesome-free-solid/faAngleLeft";
 import faAngleRight from "@fortawesome/fontawesome-free-solid/faAngleRight";
 
+import idleAnimation from "../assets/avatars/idle-animation.json";
+
 // TODO: we should make a bundle for avatar picker with it's own geometry, for now just use the indoor part of the meting room
 const meetingSpace = "https://asset-bundles-prod.reticulum.io/rooms/meetingroom/MeetingSpace1_mesh-d48250ebc6.gltf";
 
@@ -55,23 +57,37 @@ class AvatarSelector extends Component {
     }
   }
 
+  componentDidMount() {
+    const replayer = this.camera.components["motion-capture-replayer"];
+    this.camera.addEventListener("loaded", () => {
+      replayer.startReplaying(idleAnimation.camera);
+    });
+  }
+
   render() {
     const avatarAssets = this.props.avatars.map(avatar => (
       <a-asset-item id={avatar.id} key={avatar.id} response-type="arraybuffer" src={`${avatar.model}`} />
     ));
 
     const avatarEntities = this.props.avatars.map((avatar, i) => (
-      <a-entity key={avatar.id} position="0 0 0" rotation={`0 ${360 * -i / this.props.avatars.length} 0`}>
-        <a-entity position="0 0 5" rotation="0 0 0" gltf-model-plus={`src: #${avatar.id}`} inflate="true">
+      <a-entity key={avatar.id} position="0 0 0" rotation={`0 ${360 * -i / this.props.avatars.length} 0`} ik-root>
+        <a-entity class="left-controller" />
+        <a-entity class="right-controller" />
+        <a-entity position="0 0 5" rotation="0 0 0" gltf-model-plus={`src: #${avatar.id}; inflate: true`}>
           <template data-selector=".RootScene">
-            <a-entity animation-mixer />
+            <a-entity animation-mixer ik-controller />
           </template>
+          <template data-selector=".Head">
+            <a-entity class="camera" ref={el => (this.camera = el)} motion-capture-replayer="loop: true" />
+          </template>
+          {/*
           <a-animation
             attribute="rotation"
             dur="2000"
             to={`0 ${this.getAvatarIndex() === i ? 360 : 0} 0`}
             repeat="indefinite"
           />
+          */}
         </a-entity>
       </a-entity>
     ));
@@ -81,7 +97,7 @@ class AvatarSelector extends Component {
         <span className="avatar-selector__loading">
           <FormattedMessage id="profile.avatar-selector.loading" />
         </span>
-        <a-scene vr-mode-ui="enabled: false" ref={sce => (this.scene = sce)}>
+        <a-scene vr-mode-ui="enabled: false" ref={el => (this.scene = el)}>
           <a-assets>
             {avatarAssets}
             <a-asset-item id="meeting-space1-mesh" response-type="arraybuffer" src={meetingSpace} />
@@ -89,7 +105,7 @@ class AvatarSelector extends Component {
 
           <a-entity>
             <a-animation
-              ref={anm => (this.animation = anm)}
+              ref={el => (this.animation = el)}
               attribute="rotation"
               dur="1000"
               easing="ease-out"

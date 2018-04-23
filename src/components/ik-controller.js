@@ -75,6 +75,7 @@ AFRAME.registerComponent("ik-controller", {
   },
 
   update(oldData) {
+    if (this.el.parentNode.nodeName === "TEMPLATE") return;
     if (this.data.leftEye !== oldData.leftEye) {
       this.leftEye = this.el.querySelector(this.data.leftEye);
     }

@@ -3,6 +3,10 @@ import React from "react";
 import queryString from "query-string";
 import { IntlProvider, addLocaleData } from "react-intl";
 import en from "react-intl/locale-data/en";
+import "aframe-motion-capture-components";
+
+import { patchWebGLRenderingContext } from "./utils/webgl";
+patchWebGLRenderingContext();
 
 import "./assets/stylesheets/avatar-selector.scss";
 import "./vendor/GLTFLoader";
@@ -10,6 +14,7 @@ import "./vendor/GLTFLoader";
 import "./components/animation-mixer";
 import "./components/audio-feedback";
 import "./components/loop-animation";
+import "./components/ik-controller";
 import "./gltf-component-mappings";
 import { avatars } from "./assets/avatars/avatars";
 
