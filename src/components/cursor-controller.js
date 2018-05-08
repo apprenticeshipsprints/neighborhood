@@ -50,7 +50,6 @@ AFRAME.registerComponent("cursor-controller", {
     this._handlePrimaryDown = this._handlePrimaryDown.bind(this);
     this._handlePrimaryUp = this._handlePrimaryUp.bind(this);
     this._handleModelLoaded = this._handleModelLoaded.bind(this);
-    this._handleCursorLoaded = this._handleCursorLoaded.bind(this);
     this._handleControllerConnected = this._handleControllerConnected.bind(this);
     this._handleControllerDisconnected = this._handleControllerDisconnected.bind(this);
 
@@ -60,11 +59,6 @@ AFRAME.registerComponent("cursor-controller", {
     this._handleTouchEnd = this._handleTouchEnd.bind(this);
 
     this.el.sceneEl.renderer.sortObjects = true;
-    this.data.cursor.addEventListener("loaded", this.cursorLoadedListener);
-  },
-
-  remove: function() {
-    this.data.cursor.removeEventListener("loaded", this._cursorLoadedListener);
   },
 
   update: function(oldData) {
@@ -406,10 +400,6 @@ AFRAME.registerComponent("cursor-controller", {
 
   _handleModelLoaded: function() {
     this.physicalHand = this.data.playerRig.querySelector(this.data.physicalHandSelector);
-  },
-
-  _handleCursorLoaded: function() {
-    this.data.cursor.object3DMap.mesh.renderOrder = 1;
   },
 
   _handleControllerConnected: function(e) {
