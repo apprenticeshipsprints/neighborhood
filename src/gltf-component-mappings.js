@@ -1,32 +1,44 @@
 import "./components/gltf-model-plus";
-import { resolveURL } from "./utils/resolveURL";
+import { resolveGLTFComponentUrl } from "./utils/resolveURL";
 
-AFRAME.GLTFModelPlus.registerComponent("quack", "quack");
-AFRAME.GLTFModelPlus.registerComponent("sound", "sound");
-AFRAME.GLTFModelPlus.registerComponent("collision-filter", "collision-filter");
-AFRAME.GLTFModelPlus.registerComponent("css-class", "css-class");
-AFRAME.GLTFModelPlus.registerComponent("scene-shadow", "scene-shadow");
-AFRAME.GLTFModelPlus.registerComponent("super-spawner", "super-spawner");
-AFRAME.GLTFModelPlus.registerComponent("gltf-model-plus", "gltf-model-plus");
-AFRAME.GLTFModelPlus.registerComponent("body", "body");
-AFRAME.GLTFModelPlus.registerComponent("hide-when-quality", "hide-when-quality");
-AFRAME.GLTFModelPlus.registerComponent("light", "light");
-AFRAME.GLTFModelPlus.registerComponent("skybox", "skybox");
-AFRAME.GLTFModelPlus.registerComponent("layers", "layers");
-AFRAME.GLTFModelPlus.registerComponent("shadow", "shadow");
-AFRAME.GLTFModelPlus.registerComponent("xr", "xr");
-AFRAME.GLTFModelPlus.registerComponent("water", "water");
-AFRAME.GLTFModelPlus.registerComponent("scale-audio-feedback", "scale-audio-feedback");
-AFRAME.GLTFModelPlus.registerComponent("animation-mixer", "animation-mixer");
-AFRAME.GLTFModelPlus.registerComponent("loop-animation", "loop-animation");
-AFRAME.GLTFModelPlus.registerComponent("shape", "shape");
-AFRAME.GLTFModelPlus.registerComponent("visible", "visible");
-AFRAME.GLTFModelPlus.registerComponent("spawn-point", "spawn-point");
-AFRAME.GLTFModelPlus.registerComponent("hoverable", "hoverable");
-AFRAME.GLTFModelPlus.registerComponent("nav-mesh", "nav-mesh", (el, componentName, componentData, gltfPath) => {
-  if (componentData.src) {
-    componentData.src = resolveURL(componentData.src, gltfPath);
-  }
+const registerComponent = AFRAME.GLTFModelPlus.registerComponent;
 
-  el.setAttribute(componentName, componentData);
-});
+function srcInflator(srcProperty = "src") {
+  return (el, componentName, componentData, gltfPath) => {
+    if (componentData[srcProperty]) {
+      componentData[srcProperty] = resolveGLTFComponentUrl(componentData[srcProperty], gltfPath);
+    }
+
+    el.setAttribute(componentName, componentData);
+  };
+}
+
+registerComponent("animation-mixer");
+registerComponent("billboard");
+registerComponent("body");
+registerComponent("collision-filter");
+registerComponent("css-class");
+registerComponent("gltf-model-plus", "gltf-model-plus", srcInflator);
+registerComponent("hide-when-quality");
+registerComponent("hoverable");
+registerComponent("layers");
+registerComponent("light");
+registerComponent("line");
+registerComponent("link");
+registerComponent("loop-animation");
+registerComponent("material", "material", srcInflator());
+registerComponent("nav-mesh", "nav-mesh", srcInflator());
+registerComponent("quack");
+registerComponent("raycaster");
+registerComponent("scale-audio-feedback");
+registerComponent("scene-shadow");
+registerComponent("shadow");
+registerComponent("shape");
+registerComponent("skybox");
+registerComponent("sound", "sound", srcInflator());
+registerComponent("spawn-point");
+registerComponent("super-spawner");
+registerComponent("text");
+registerComponent("visible");
+registerComponent("water");
+registerComponent("xr");

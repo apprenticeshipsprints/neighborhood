@@ -17,7 +17,7 @@ AFRAME.GLTFModelPlus = {
   registerComponent(componentKey, componentName, inflator) {
     AFRAME.GLTFModelPlus.components[componentKey] = {
       inflator: inflator || AFRAME.GLTFModelPlus.defaultInflator,
-      componentName
+      componentName: componentName || componentKey
     };
   },
   components: {}
