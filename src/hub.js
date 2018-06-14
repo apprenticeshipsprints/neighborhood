@@ -14,7 +14,7 @@ import "aframe-teleport-controls";
 import "aframe-input-mapping-component";
 import "aframe-billboard-component";
 import "aframe-rounded";
-import "webrtc-adapter";
+// import "webrtc-adapter";
 import "aframe-slice9-component";
 import "aframe-motion-capture-components";
 import "./utils/audio-context-fix";
@@ -244,7 +244,6 @@ const onReady = async () => {
 
     scene.setAttribute("networked-scene", {
       room: hubId,
-      serverURL: process.env.JANUS_SERVER
     });
 
     if (isDebug) {
@@ -303,30 +302,18 @@ const onReady = async () => {
             store.update({ activity: { lastEnteredAt: moment().toJSON() } });
           });
         }
-        remountUI({ occupantCount: NAF.connection.adapter.publisher.initialOccupants.length + 1 });
+        // remountUI({ occupantCount: NAF.connection.adapter.publisher.initialOccupants.length + 1 });
       });
 
       document.body.addEventListener("clientConnected", () => {
-        remountUI({
-          occupantCount: Object.keys(NAF.connection.adapter.occupants).length + 1
-        });
+        // remountUI({ occupantCount: Object.keys(NAF.connection.adapter.occupants).length + 1 });
       });
 
       document.body.addEventListener("clientDisconnected", () => {
-        remountUI({
-          occupantCount: Object.keys(NAF.connection.adapter.occupants).length + 1
-        });
+        // remountUI({ occupantCount: Object.keys(NAF.connection.adapter.occupants).length + 1 });
       });
 
-      scene.components["networked-scene"].connect().catch(connectError => {
-        // hacky until we get return codes
-        const isFull = connectError.error && connectError.error.msg.match(/\bfull\b/i);
-        console.error(connectError);
-        remountUI({ roomUnavailableReason: isFull ? "full" : "connect_error" });
-        exitScene();
-
-        return;
-      });
+      scene.components["networked-scene"].connect();
 
       if (isDebug) {
         NAF.connection.adapter.session.options.verbose = true;
@@ -348,7 +335,7 @@ const onReady = async () => {
       }
 
       if (mediaStream) {
-        NAF.connection.adapter.setLocalMediaStream(mediaStream);
+        // NAF.connection.adapter.setLocalMediaStream(mediaStream);
 
         if (screenEntity) {
           screenEntity.setAttribute("visible", sharingScreen);

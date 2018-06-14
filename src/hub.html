@@ -21,6 +21,8 @@
     
     <!-- HACK: this has to run after A-Frame but before our bundle, since A-Frame blows away the local storage setting -->
     <script src="https://cdn.rawgit.com/gfodor/ba8f88d9f34fe9cbe59a01ce3c48420d/raw/03e31f0ef7b9eac5e947bd39e440f34df0701f75/naf-janus-adapter-logging.js" integrity="sha384-4q1V8Q88oeCFriFefFo5uEUtMzbw6K116tFyC9cwbiPr6wEe7050l5HoJUxMvnzj" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
+    <script src="/easyrtc/easyrtc.js"></script>
 </head>
 
 <body data-html-prefix="<%= HTML_PREFIX %>">
@@ -35,7 +37,7 @@
 
     <a-scene
         renderer="antialias: true"
-        networked-scene="adapter: janus; audio: true; debug: true; connectOnLoad: false;"
+        networked-scene="adapter: easyrtc; audio: true; debug: true; connectOnLoad: false;"
         physics="gravity: -6;"
         mute-mic="eventSrc: a-scene; toggleEvents: action_mute"
         freeze-controller="toggleEvent: action_freeze"

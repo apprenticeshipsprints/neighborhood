@@ -1,0 +1,13 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node easyrtc-server.js"
+  },
+  "dependencies": {
+    "easyrtc": "^1.1.0",
+    "express": "^4.16.3",
+    "serve-static": "^1.13.2",
+    "socket.io": "^2.1.1"
+  }
+}
